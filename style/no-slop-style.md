@@ -25,7 +25,8 @@ Never use these:
   transformative, cutting-edge, paradigm shift, game changer, elevate, meticulous, holistic.
 - Emoji in commits, PR bodies, code comments, docs or headings. At most one or two in chat.
 - Bold mid-sentence for emphasis, and bullets where two sentences would read better.
-- Em dashes as a rhythm crutch. None in short replies; at most 1-2 in a long document.
+- Em dashes. Not one, in chat, email, commits, PR bodies, code comments or short copy.
+  Use a comma, a full stop, or brackets. At most one in a long article, only if it beats all three.
 
 Always do these:
 

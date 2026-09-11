@@ -1,0 +1,28 @@
+{
+  "name": "no-slop-kit",
+  "description": "Channel-aware AI-slop linter, hooks and skills for prose, commits and PR bodies.",
+  "owner": {
+    "name": "Vivek Siruvuri",
+    "url": "https://github.com/svivekvarma"
+  },
+  "plugins": [
+    {
+      "name": "no-slop-kit",
+      "source": "./",
+      "displayName": "No Slop Kit",
+      "description": "Catches AI-slop patterns across nine channels (technical docs, articles, blogs, emails, messages, social posts and comments, code comments, commits and PR bodies) with a zero-token regex linter, then has Claude fix them. Derived from petergyang/no-ai-slop.",
+      "license": "MIT",
+      "homepage": "https://github.com/svivekvarma/no-slop-kit",
+      "repository": "https://github.com/svivekvarma/no-slop-kit",
+      "keywords": [
+        "writing",
+        "editing",
+        "ai-slop",
+        "prose-linter",
+        "documentation",
+        "pull-requests"
+      ],
+      "category": "productivity"
+    }
+  ]
+}

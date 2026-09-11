@@ -66,7 +66,7 @@ Tell the user three things, briefly:
 
 1. Which file changed, by full path.
 2. That they need to restart their agent session for a user-scope change to load.
-3. The context cost, which is about 560 tokens per session for the block. Point at the token table in `README.md` if they want the full accounting.
+3. The context cost, which is about 700 tokens per session for the block. Point at the token table in `README.md` if they want the full accounting.
 
 Do not paste the style block into the chat. Do not summarise its rules back to
 the user unless they ask what it contains.

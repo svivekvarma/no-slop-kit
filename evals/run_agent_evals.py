@@ -251,6 +251,10 @@ def main(argv: list[str] | None = None) -> int:
                         help="samples per condition; scores are averaged. "
                              "Model output varies, so a single sample makes a "
                              "noisy eval (default: 1)")
+    parser.add_argument("--tolerance", type=int, default=8,
+                        help="how far the styled run may fall below its own "
+                             "baseline before it counts as a regression. "
+                             "Single samples are noisy (default: 8)")
     parser.add_argument("--timeout", type=int, default=180)
     parser.add_argument("--save", default="")
     parser.add_argument("--estimate", action="store_true",
@@ -356,18 +360,23 @@ def main(argv: list[str] | None = None) -> int:
             print(f"{case['id']:20} {case['channel']:18} {base['score']:>5} "
                   f"{styled['score']:>7} {delta:>+6}  {facts}")
 
-            cap = case.get("max_score", 75)
+            cap = case.get("max_score", 60)
             if styled["score"] < cap:
                 failures.append(f"{model}/{case['id']}: styled scored "
-                                f"{styled['score']}, needs >= {cap} "
+                                f"{styled['score']}, below the {cap} floor "
                                 f"({styled['findings']})")
+            # The real per-case gate. Severity-3 findings are the patterns no
+            # reasonable writer defends, so one of them is a failure even when
+            # the score looks fine. Score alone is too noisy to gate on.
+            if styled["signature"]:
+                failures.append(f"{model}/{case['id']}: styled output contains "
+                                f"signature slop ({styled['findings']})")
             if not styled["kept_facts"]:
                 failures.append(f"{model}/{case['id']}: styled output dropped "
                                 f"{styled['missing_facts']}")
-            if styled["score"] < base["score"]:
-                failures.append(f"{model}/{case['id']}: styled "
-                                f"({styled['score']}) is worse than baseline "
-                                f"({base['score']})")
+            # Per-case baseline comparison is reported, not gated: at one
+            # sample per condition the run-to-run variance is larger than the
+            # effect. The aggregate below is the honest comparison.
             rows.append(row)
 
         scored = [r for r in rows if r["model"] == model
@@ -381,6 +390,15 @@ def main(argv: list[str] | None = None) -> int:
             print(f"\n  mean score      {base_avg:5.1f}  ->  {sty_avg:5.1f}  "
                   f"({sty_avg - base_avg:+.1f})")
             print(f"  signature slop  {base_sig:5}  ->  {sty_sig:5}")
+        if scored:
+            if sty_sig > base_sig:
+                failures.append(f"{model}: styled runs produced more signature "
+                                f"slop ({sty_sig}) than baseline ({base_sig})")
+            if sty_avg < base_avg - args.tolerance:
+                failures.append(f"{model}: styled mean {sty_avg:.1f} is more "
+                                f"than {args.tolerance} below baseline mean "
+                                f"{base_avg:.1f}. Re-run with --repeat 3 "
+                                f"before treating this as real.")
         if backend.meters_tokens and tokens_in:
             cost = price(model, tokens_in, tokens_out)
             shown = f"${cost:.4f}" if cost is not None else "unpriced"

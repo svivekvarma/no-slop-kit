@@ -290,6 +290,39 @@ def suite_unit(r: Results) -> None:
         except Exception as exc:                                # noqa: BLE001
             r.check(f"lint({text!r}) is safe", False, repr(exc))
 
+    # A leading "#" in the code-comments channel is a Python comment, not a
+    # markdown heading. Before the denominator floor and this mute, a correct
+    # one-line code comment scored 0.
+    comment = "# Vendor p99 latency was 22s in Aug 2026; prevents spurious retries"
+    report = sl.lint(comment, "code-comments")
+    r.check("a python comment is not a heading violation",
+            not report["findings"], str(report["findings"]))
+    r.check("a good code comment scores well", report["score"] >= 90,
+            f"scored {report['score']}")
+
+    # Short copy is the normal case in half these channels. One finding in a
+    # 16-word message is one finding, not a zero.
+    short = ("Weekly ingest sync moves to Thursday at 10am — half the "
+             "team's out Wednesday. No action needed.")
+    report = sl.lint(short, "messages")
+    r.check("one em dash in a short message is still flagged",
+            any(f["rid"] == "em-dash-density" for f in report["findings"]),
+            str(report["findings"]))
+    r.check("one finding in a short message does not score 0",
+            report["score"] >= 50, f"scored {report['score']}")
+
+    # The floor must not rescue genuinely dense slop.
+    dense = ("Here's the thing. What nobody tells you is that experts agree "
+             "this marks a pivotal moment.")
+    r.check("dense slop still scores badly despite the floor",
+            sl.lint(dense)["score"] < 40, f"scored {sl.lint(dense)['score']}")
+
+    # Muting must reach structural findings, not only the regex rules.
+    r.check("channel mute applies to structural findings",
+            not any(f["rid"] == "structure-mismatch"
+                    for f in sl.lint("# heading\n\ntext here\n",
+                                     "code-comments")["findings"]))
+
 
 # ---------------------------------------------------------------------------
 # Suite 5: hook and installer contracts
@@ -447,6 +480,55 @@ def suite_wiring(r: Results) -> None:
     r.check("hook commands use CLAUDE_PLUGIN_ROOT",
             all("${CLAUDE_PLUGIN_ROOT}" in c for c in commands), str(commands))
     r.check("the linter the hooks call exists", os.path.isfile(LINT))
+    # Bare `python` is Python 2 or missing on most Linux and macOS boxes, and a
+    # PostToolUse hook fails silently, so the user would never learn why.
+    r.check("hook commands try python3 before python",
+            all(c.strip().startswith("python3") and "|| python " in c
+                for c in commands), str(commands))
+
+    # The marketplace manifest is what `/plugin marketplace add owner/repo`
+    # reads. Without it the README's first instruction fails.
+    market_path = os.path.join(ROOT, ".claude-plugin", "marketplace.json")
+    r.check(".claude-plugin/marketplace.json exists", os.path.isfile(market_path))
+    if os.path.isfile(market_path):
+        with open(market_path, encoding="utf-8") as handle:
+            market = json.load(handle)
+        r.check("marketplace has name", bool(market.get("name")))
+        r.check("marketplace has an owner name",
+                bool((market.get("owner") or {}).get("name")))
+        entries = market.get("plugins") or []
+        r.check("marketplace lists at least one plugin", bool(entries))
+        for entry in entries:
+            r.check(f"marketplace entry {entry.get('name')} has a source",
+                    bool(entry.get("source")))
+            source = entry.get("source")
+            if isinstance(source, str):
+                r.check(f"marketplace source {source!r} is a relative path",
+                        source.startswith("./") and ".." not in source, source)
+                target = os.path.normpath(os.path.join(ROOT, source))
+                r.check(f"marketplace source {source!r} resolves to a plugin",
+                        os.path.isfile(os.path.join(target, ".claude-plugin",
+                                                    "plugin.json")), target)
+            r.check("marketplace plugin name matches the manifest",
+                    entry.get("name") == manifest.get("name"),
+                    f"{entry.get('name')} vs {manifest.get('name')}")
+
+    # The repo wires the same hooks for itself, so contributors dogfood them.
+    settings_path = os.path.join(ROOT, ".claude", "settings.json")
+    r.check(".claude/settings.json exists", os.path.isfile(settings_path))
+    if os.path.isfile(settings_path):
+        with open(settings_path, encoding="utf-8") as handle:
+            local_events = json.load(handle).get("hooks", {})
+        r.check("project settings wire both hook events",
+                {"PostToolUse", "PreToolUse"} <= set(local_events),
+                str(sorted(local_events)))
+        local_commands = [h["command"] for group in local_events.values()
+                          for entry in group for h in entry["hooks"]]
+        r.check("project hook commands use CLAUDE_PROJECT_DIR",
+                all("${CLAUDE_PROJECT_DIR}" in c for c in local_commands),
+                str(local_commands))
+        r.check("project hook commands try python3 first",
+                all(c.strip().startswith("python3") for c in local_commands))
 
     for rel in ("skills/no-ai-slop/SKILL.md", "skills/no-slop-setup/SKILL.md"):
         with open(os.path.join(ROOT, rel), encoding="utf-8") as handle:

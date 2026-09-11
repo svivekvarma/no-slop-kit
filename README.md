@@ -75,7 +75,7 @@ Measured, not estimated away. Regenerate with `python tools/token_report.py`.
 
 | What | Tokens | When it loads |
 | --- | ---: | --- |
-| Style block | **664** | Every session, once installed |
+| Style block | **698** | Every session, once installed |
 | `no-slop` SKILL.md | 3,765 | Only when the skill runs |
 | `eval.md` | 1,370 | Only when the skill self-checks |
 | One channel file | 736 | Only when the skill runs, one of nine |
@@ -83,7 +83,7 @@ Measured, not estimated away. Regenerate with `python tools/token_report.py`.
 | `/deslop`, `/slop-check` | 217, 306 | Only when invoked |
 | Hook finding report | ~285 | Only on a write that has slop in it |
 
-**The always-on cost is 664 tokens per session.** That is the style block, and
+**The always-on cost is 698 tokens per session.** That is the style block, and
 it is the only thing that loads unconditionally. Channel files load one at a
 time and only when the skill is actually editing, which is why they are not
 `@`-imported into your instruction file.
@@ -96,10 +96,10 @@ Counts are estimated at 3.7 characters per token. Run
 `python tools/token_report.py --exact` with an API key for real counts from
 `count_tokens`.
 
-### Is 664 tokens worth it
+### Is 698 tokens worth it
 
 It replaces the correction you would otherwise type. One "rewrite that without
-the marketing voice" round trip costs more than 664 tokens: your message, the
+the marketing voice" round trip costs more than 698 tokens: your message, the
 model re-reading the draft, and a second full draft. The block pays for itself
 the first time it prevents one of those, and it prevents them every session.
 
@@ -220,14 +220,14 @@ The channel is inferred from the file path, or set with `--channel`.
 Two suites. The first is offline and free, the second calls a model.
 
 ```sh
-python evals/run_evals.py            # 182 checks, no credentials, no cost
+python evals/run_evals.py            # 199 checks, no credentials, no cost
 python evals/run_agent_evals.py      # 26 calls, ~$0.05 on Haiku 4.5
 ```
 
 The offline suite measures three things that matter:
 
 ```
-checks        182/182 passed
+checks        199/199 passed
 recall        51/51 upstream examples (100%) over 17 patterns
 known misses  18/18 left to the model
 false pos.    0 in 419 words (0.00 per 1000)
@@ -248,9 +248,20 @@ on.** The clean corpus is human-written prose that must produce zero findings.
 
 The agent suite is the end-to-end one: it asks a real model to write a PR body,
 a Slack message, a runbook section and ten other things, once without the style
-block and once with it, and lints both. A case passes only if the styled run
-clears its threshold, beats its own baseline, and still contains the facts the
-prompt supplied, so a model cannot score well by deleting content.
+block and once with it, and lints both.
+
+A case passes when the styled output has **zero signature findings**, keeps
+every fact the prompt supplied, and clears a score floor of 60. Signature
+findings are the severity-3 patterns nobody defends. The fact check is what
+stops a model from scoring well by deleting content.
+
+Per-case score deltas are reported but not gated, and that is deliberate. At one
+sample per condition, run-to-run variance is larger than the effect: across
+three full runs the same Slack case scored 70/70, then 100/70, then 70/100
+without any change to the prompt or the rules. Gating on that would be fitting
+to noise. What is gated in aggregate is that the styled runs produce no more
+signature slop than the baseline, and that the styled mean does not fall far
+below it. Use `--repeat 3` when a number matters.
 
 ```sh
 python evals/run_agent_evals.py --estimate                       # price it first

@@ -11,7 +11,7 @@ both directions. Reports of either kind are the most useful thing you can send.
 python evals/run_evals.py
 ```
 
-182 checks, no credentials, no cost, a few seconds. It must pass before and
+199 checks, no credentials, no cost, a few seconds. It must pass before and
 after your change.
 
 ## False positives matter more than misses

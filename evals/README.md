@@ -5,7 +5,7 @@
 Two suites. One is free and offline, one calls a model.
 
 ```sh
-python evals/run_evals.py                  # 182 checks, no credentials, no cost
+python evals/run_evals.py                  # 199 checks, no credentials, no cost
 python evals/run_agent_evals.py --estimate # price the second one first
 python evals/run_agent_evals.py            # 26 calls, ~$0.05 on Haiku 4.5
 ```
@@ -45,12 +45,23 @@ linter, so grading costs nothing.
 
 A case passes when the styled run:
 
-1. clears the case's `max_score` threshold,
-2. scores at least as well as its own baseline, and
-3. still contains every string in `must_include`.
+1. produces **zero signature findings** (severity 3, the patterns nobody
+   defends),
+2. still contains every string in `must_include`, and
+3. clears a score floor of 60.
 
-Check 3 is the one that matters. Without it a model could score 100 by writing
-two words, and the eval would call that a win.
+Check 2 is the one that keeps the eval honest. Without it a model could score
+100 by writing two words, and the suite would call that a win.
+
+Check 3 is a catastrophe floor, not a quality bar. Per-case score deltas are
+printed but **not** gated, because at one sample per condition the noise is
+bigger than the signal. Measured across three consecutive full runs with no
+change to the code, `slack-incident` scored 70/70, then 100/70, then 70/100.
+A gate on that number would fail at random.
+
+The aggregate gates are the defensible ones: the styled runs must produce no
+more signature slop than the baseline, and the styled mean must not fall more
+than `--tolerance` below the baseline mean.
 
 ```sh
 python evals/run_agent_evals.py --repeat 3        # average 3 samples, less noise
@@ -61,9 +72,10 @@ python evals/run_agent_evals.py --backend codex   # or claude
 python evals/run_agent_evals.py --save out.json   # keep the generated text
 ```
 
-Model output varies. A single sample once made a case swing 21 points because
-that draft happened to include an emoji. Use `--repeat 3` when the result
-matters.
+Model output varies more than you would expect. A single sample once swung a
+case 21 points because that draft happened to contain one emoji, and the
+three-run Slack figures above came from identical code. Use `--repeat 3` when
+the result matters, and do not tune the style block on a single run.
 
 ### Cost
 

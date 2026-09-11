@@ -42,6 +42,10 @@ for _stream in (sys.stdout, sys.stderr):
 
 PROSE_EXTS = {".md", ".mdx", ".markdown", ".txt", ".rst"}
 
+# Scores are findings per 100 words. Below this many words the denominator is
+# held here, so a short message is not scored on a sample of one sentence.
+SHORT_TEXT_FLOOR = 60
+
 # ---------------------------------------------------------------------------
 # Pattern catalog
 # ---------------------------------------------------------------------------
@@ -395,10 +399,13 @@ CHANNELS: dict[str, Channel] = {
         amplify=("importance-puffery", "interpretive-metadiscourse",
                  "throat-clearing", "binary-contrast")),
     "code-comments": Channel(
+        # A leading "#" here is a Python comment, not a markdown heading, so the
+        # heading and heading-emoji rules are muted. Without this every Python
+        # comment scored as a structure violation.
         "code-comments", "Inline comments and docstrings.",
         0.0, 0, False, 60,
         mute=("colon-title-case", "summary-recap", "synonym-cycling",
-              "dramatic-fragment"),
+              "dramatic-fragment", "structure-mismatch", "emoji-heading"),
         amplify=("interpretive-metadiscourse", "empty-phrase", "banned-word")),
     "pull-requests": Channel(
         "pull-requests", "PR titles, descriptions, commit messages.",
@@ -542,12 +549,18 @@ def lint(text: str, channel_name: str = "default") -> dict:
                 rule.rid, severity, rule.label, rule.fix, line,
                 _quote(body, start, match.end())))
 
-    findings.extend(_structural_findings(body, words, channel))
+    findings.extend(f for f in _structural_findings(body, words, channel)
+                    if f.rid not in channel.mute)
     findings.sort(key=lambda f: (-f.severity, f.line))
 
     weights = {3: 6.0, 2: 3.0, 1: 1.0}
     raw = sum(weights[f.severity] for f in findings)
-    per_100 = (raw / words * 100) if words else 0.0
+    # Density needs a denominator floor. Without one a single em dash in a
+    # 16-word Slack message scores 0, which is both useless and wrong: short
+    # copy is the normal case in half these channels, and one finding in it is
+    # one finding, not a catastrophe.
+    denominator = max(words, SHORT_TEXT_FLOOR)
+    per_100 = (raw / denominator * 100) if words else 0.0
     score = max(0, round(100 - per_100 * 6))
 
     return {

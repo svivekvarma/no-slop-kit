@@ -2,92 +2,118 @@
   {
     "id": "pr-body-incident",
     "channel": "pull-requests",
-    "max_score": 75,
-    "must_include": ["412"],
+    "max_score": 60,
+    "must_include": [
+      "412"
+    ],
     "prompt": "Write a pull request description. Facts: the ingest worker retried a failed batch forever; one malformed row in the 03-03 file locked a Postgres partition for six hours on March 3rd and the on-call engineer drained the queue by hand; the fix caps attempts at three with backoff 1s/4s/16s and moves the batch to the ingest_dead_letter table; it closes issue 412; pytest tests/ingest passed 41 tests. Output only the PR description."
   },
   {
     "id": "pr-body-small",
     "channel": "pull-requests",
-    "max_score": 80,
-    "must_include": ["typo"],
+    "max_score": 60,
+    "must_include": [
+      "typo"
+    ],
     "prompt": "Write a pull request description for a one-line change. Facts: a typo in the CLI help text said 'recieve' instead of 'receive'; no behaviour change; no tests needed. Output only the PR description."
   },
   {
     "id": "commit-message",
     "channel": "pull-requests",
-    "max_score": 80,
-    "must_include": ["retr"],
+    "max_score": 60,
+    "must_include": [
+      "retr"
+    ],
     "prompt": "Write a git commit message (subject line and body). Facts: ingest batches now stop after three attempts instead of retrying forever, and move to the ingest_dead_letter table. Output only the commit message."
   },
   {
     "id": "slack-incident",
     "channel": "messages",
-    "max_score": 80,
-    "must_include": ["15"],
+    "max_score": 60,
+    "must_include": [
+      "15"
+    ],
     "prompt": "Write a Slack message to the #eng channel. Facts: the deploy is down for about 15 minutes; the ingest worker is stuck on a bad row in the 03-03 file; you are draining the queue now; you will post again when it clears. Output only the message."
   },
   {
     "id": "slack-fyi",
     "channel": "messages",
-    "max_score": 80,
-    "must_include": ["Thursday"],
+    "max_score": 60,
+    "must_include": [
+      "Thursday"
+    ],
     "prompt": "Write a short Slack message to a teammate. Facts: you moved the weekly ingest sync from Wednesday to Thursday at 10am because half the team is out Wednesday; no action needed from them. Output only the message."
   },
   {
     "id": "release-note",
     "channel": "technical-docs",
-    "max_score": 75,
-    "must_include": ["dead_letter"],
+    "max_score": 60,
+    "must_include": [
+      "dead_letter"
+    ],
     "prompt": "Write a release note entry. Facts: failed ingest batches now stop after three attempts instead of retrying forever; they move to the ingest_dead_letter table with their payload and last exception; replay them with bin/replay --batch-id <id>; requires Postgres 14 or newer. Output only the release note."
   },
   {
     "id": "runbook-section",
     "channel": "technical-docs",
-    "max_score": 75,
-    "must_include": ["replay"],
+    "max_score": 60,
+    "must_include": [
+      "replay"
+    ],
     "prompt": "Write a runbook section titled 'Draining a stuck ingest partition'. Facts: symptom is ingest_lag_seconds above 3600 and one partition not advancing; check with bin/ingest status --partition <n>; the usual cause is a malformed row now sent to ingest_dead_letter; replay with bin/replay --batch-id <id>, which is idempotent; escalate to the data platform team if lag stays high for 30 minutes after replay. Output only the runbook section."
   },
   {
     "id": "outreach-email",
     "channel": "email",
-    "max_score": 75,
-    "must_include": ["Thursday"],
+    "max_score": 60,
+    "must_include": [
+      "Thursday"
+    ],
     "prompt": "Write a short work email to Priya. Facts: you need the retry budget PR (#412) reviewed and merged by Friday or the March backfill slips; the worker retried one bad row for six hours on March 3rd; the fix caps attempts at three; you want her to confirm by Thursday. Output only the email."
   },
   {
     "id": "blog-intro",
     "channel": "articles-and-blogs",
-    "max_score": 70,
-    "must_include": ["March"],
+    "max_score": 60,
+    "must_include": [
+      "March"
+    ],
     "prompt": "Write the opening three paragraphs of a blog post about retry ceilings. Facts: on March 3rd an ingest worker spent six hours retrying one malformed row and held a Postgres partition, so the nightly backfill never ran; you wrote that retry loop two years earlier with backoff but no ceiling because you had only seen transient network failures, which always clear, and a malformed row never clears; the fix was four lines. Output only the paragraphs."
   },
   {
     "id": "linkedin-post",
     "channel": "social-posts",
-    "max_score": 65,
-    "must_include": ["six hours"],
+    "max_score": 60,
+    "must_include": [
+      "six hours"
+    ],
     "prompt": "Write a LinkedIn post. Facts: an ingest worker you wrote two years ago retried one malformed row for six hours and held a Postgres partition; you had given the loop backoff but no ceiling; the fix was four lines, capping attempts at three and dead-lettering the batch. Output only the post."
   },
   {
     "id": "social-comment",
     "channel": "social-comments",
-    "max_score": 75,
-    "must_include": ["ceiling"],
+    "max_score": 60,
+    "must_include": [
+      "ceiling"
+    ],
     "prompt": "Write a reply to a LinkedIn post that claims exponential backoff solves retry storms. Facts: backoff alone did not save you, because a malformed row never becomes valid, so the loop needs a ceiling and a dead-letter destination, not just longer waits. Output only the reply."
   },
   {
     "id": "review-comment",
     "channel": "review-comments",
-    "max_score": 80,
-    "must_include": ["empty"],
+    "max_score": 60,
+    "must_include": [
+      "42"
+    ],
     "prompt": "Write a code review comment. Facts: the function indexes rows[0] before it checks the length, so it raises on an empty list; the guard should move above line 42; this should block the merge. Output only the comment."
   },
   {
     "id": "code-comment",
     "channel": "code-comments",
-    "max_score": 75,
-    "must_include": ["22"],
+    "max_score": 60,
+    "must_include": [
+      "22"
+    ],
     "prompt": "Write the code comment that should sit above the line `timeout = 30` in a client that calls a vendor API. Facts: the vendor's measured p99 latency was 22 seconds in August 2026; 30 seconds gives headroom; shorter timeouts caused spurious retries. Output only the comment, formatted as a Python comment."
   }
 ]
