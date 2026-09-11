@@ -1,0 +1,64 @@
+No Slop Kit
+Copyright (c) 2026 Vivek Siruvuri
+
+This product includes software developed by Peter Yang.
+
+Upstream project:  no-ai-slop
+Upstream author:   Peter Yang
+Upstream URL:      https://github.com/petergyang/no-ai-slop
+Upstream license:  MIT
+Derived from commit: 000650b156983f5159695b441477f4e63b25dc85
+
+
+WHAT CAME FROM UPSTREAM
+-----------------------
+
+skills/no-ai-slop/SKILL.md
+    The editing principles, the words-to-cut lists and the patterns-to-cut
+    catalog are Peter Yang's, reproduced with light edits. The channel router
+    section and the front matter are new. The file carries a provenance header.
+
+skills/no-ai-slop/eval.md
+    Reproduced from upstream with the channel checks appended. The file carries
+    a provenance header.
+
+scripts/slop_lint.py
+    New code. The pattern names, the banned-word list, the empty-phrase list
+    and the definitions of each slop pattern are taken from upstream's
+    SKILL.md and encoded as regular expressions.
+
+
+WHAT IS NEW IN THIS PROJECT
+---------------------------
+
+    .claude-plugin/plugin.json      Claude Code plugin manifest
+    hooks/hooks.json                PostToolUse and PreToolUse activations
+    scripts/slop_lint.py            zero-token deterministic linter
+    skills/no-ai-slop/channels/     nine per-channel rule files
+    skills/no-slop-setup/           installs the style section into CLAUDE.md
+    claude-md/anti-slop.md          the CLAUDE.md section itself
+    commands/                       /deslop and /slop-check
+    evals/                          fixture-based eval harness
+    tools/token_report.py           measures the context cost of the kit
+
+
+WHAT WAS DELIBERATELY NOT COPIED
+--------------------------------
+
+    .codex-plugin/plugin.json   Upstream's ChatGPT and Codex plugin manifest.
+                                It names Peter Yang as author and points at his
+                                sites. Shipping it would misattribute this
+                                project; editing the author field would strip
+                                his attribution. Omitted instead.
+
+    assets/no-ai-slop.png       Upstream's logo and brand color.
+
+    PRIVACY.md, TERMS.md        Both end in Peter Yang's email address.
+                                Rewritten from scratch as PRIVACY.md here with
+                                this project's own contact.
+
+    agents/openai.yaml          Upstream's ChatGPT interface metadata.
+
+If you want the original, unmodified skill, install it from
+https://github.com/petergyang/no-ai-slop. This project is not affiliated with
+or endorsed by Peter Yang.

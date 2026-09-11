@@ -1,0 +1,56 @@
+# Ground truth from petergyang/no-ai-slop SKILL.md (MIT, (c) 2026 Peter Yang).
+# These example sentences were written by the upstream author, not by this
+# project, so they test the linter against a definition of slop it was not
+# tuned on. Format: rule-id <TAB> channel <TAB> text
+#
+binary-contrast	default	It's not a tool. It's a teammate.
+binary-contrast	default	The question isn't the model. It's the eval.
+binary-contrast	default	It's not just a feature but a philosophy.
+throat-clearing	default	Here's the thing. We shipped the parser on Tuesday.
+throat-clearing	default	Here's what I mean. The batch retries forever.
+throat-clearing	default	Let me be clear. The migration is not reversible.
+throat-clearing	default	I'll be honest. The first version was slow.
+throat-clearing	default	The uncomfortable truth is that nobody read the doc.
+faux-insight	default	This is the part most people skip. Write the rollback first.
+faux-insight	default	What most people get wrong is the retry ceiling.
+faux-insight	default	Here's what nobody tells you about distributed locks.
+faux-insight	default	The part everyone misses: distribution is the real moat.
+colon-reveal	default	The best part: it learns.
+colon-reveal	default	The detail that makes it work: a separate agent grades it.
+superficial-analysis	default	The launch adds file search, highlighting the team's commitment to better workflows.
+importance-puffery	default	The library stands as a testament to careful design.
+importance-puffery	default	The launch marks a pivotal moment for the company.
+importance-puffery	default	Caching plays a vital role in the request path.
+importance-puffery	default	The release solidifies its position in the market.
+importance-puffery	default	The result underscores its significance for the team.
+interpretive-metadiscourse	default	That last part matters more than it sounds.
+interpretive-metadiscourse	default	The key point is that the lock is not reentrant.
+interpretive-metadiscourse	default	As you can see, the counter never resets.
+interpretive-metadiscourse	default	This distinction matters for the retry path.
+weasel-attribution	default	Experts agree that microservices add overhead.
+weasel-attribution	default	Industry reports suggest adoption is accelerating.
+weasel-attribution	default	Many argue that the tradeoff is worth it.
+weasel-attribution	default	The pattern is widely regarded as an antipattern.
+weasel-attribution	default	Studies show that code review catches most defects.
+weak-verb-phrase	default	The app serves as a centralized hub for sponsor management.
+weak-verb-phrase	default	The team made a decision to roll back the release.
+weak-verb-phrase	default	The parser has the ability to read gzip input.
+negative-listing	default	Not a framework. Not a library. A protocol.
+dramatic-fragment	default	That's it. That's the whole thing.
+rhetorical-setup	default	What if I told you the cache was never enabled?
+rhetorical-setup	default	Think about it: every retry costs a connection.
+rhetorical-setup	default	Plot twist: the index was missing the whole time.
+fake-profound-kicker	default	The future isn't coming. It's already here.
+summary-recap	default	In conclusion, the retry budget solved the partition lock.
+summary-recap	default	Ultimately, the fix was four lines of code.
+summary-recap	default	Overall, the migration went better than expected.
+banned-word	default	We will delve into the retry semantics below.
+banned-word	default	The platform empowers teams to leverage their data.
+banned-word	default	A robust, cutting-edge solution for modern teams.
+banned-word	default	This utility will streamline and elevate your workflow.
+banned-word	default	The seamless integration unlocks a paradigm shift.
+empty-phrase	default	It's worth noting that the worker restarts nightly.
+empty-phrase	default	At the end of the day, the schema has to change.
+empty-phrase	default	In today's world, every team ships continuously.
+empty-phrase	default	In this article, we will look at the parser. Let's dive in.
+emoji-heading	default	# 🚀 Shipping the new parser

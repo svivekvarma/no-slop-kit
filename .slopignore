@@ -1,0 +1,12 @@
+# Files the linter must not scan, because they quote slop on purpose.
+# One glob per line, matched against the repo-relative and absolute path.
+# These files also carry a `slop-lint: off` marker, in YAML front matter or as
+# an HTML comment, so either mechanism alone is enough.
+
+skills/no-ai-slop/*
+skills/no-ai-slop/channels/*
+skills/no-slop-setup/*
+style/*
+commands/*
+evals/fixtures/*
+evals/fixtures/*/*

@@ -1,0 +1,47 @@
+name: slop-lint
+
+on:
+  pull_request:
+    paths:
+      - "**/*.md"
+      - "**/*.mdx"
+      - "**/*.txt"
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  prose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Lint prose changed in this PR
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.sha }}"
+            files=$(git diff --name-only --diff-filter=ACM "$base" HEAD \
+              | grep -E '\.(md|mdx|txt)$' || true)
+          else
+            files=$(git ls-files '*.md' '*.mdx' '*.txt')
+          fi
+          if [ -z "$files" ]; then
+            echo "no prose files changed"
+            exit 0
+          fi
+          echo "$files"
+          # Reports findings. Does not fail the build: prose is a judgement
+          # call and a red X on wording trains people to ignore CI. Swap in
+          # --min-score 60 if your team wants it enforced.
+          python scripts/slop_lint.py $files || true
+
+      - name: Run the eval suite
+        run: python evals/run_evals.py

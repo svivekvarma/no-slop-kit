@@ -1,0 +1,24 @@
+{
+  "name": "no-slop-kit",
+  "displayName": "No Slop Kit",
+  "version": "1.0.0",
+  "description": "Catches AI-slop patterns in prose across nine channels (technical docs, articles, blogs, emails, messages, social posts and comments, code comments, commits and PR bodies) with a zero-token regex linter, then has Claude fix them. Derived from petergyang/no-ai-slop.",
+  "author": {
+    "name": "Vivek Siruvuri",
+    "url": "https://www.viveksiruvuri.com"
+  },
+  "homepage": "https://github.com/svivekvarma/no-slop-kit",
+  "repository": "https://github.com/svivekvarma/no-slop-kit",
+  "license": "MIT",
+  "keywords": [
+    "writing",
+    "editing",
+    "ai-slop",
+    "prose-linter",
+    "documentation",
+    "pull-requests",
+    "voice"
+  ],
+  "hooks": "./hooks/hooks.json",
+  "defaultEnabled": true
+}

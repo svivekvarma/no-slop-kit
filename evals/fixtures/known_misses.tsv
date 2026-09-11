@@ -1,0 +1,29 @@
+# Slop the regex layer cannot catch, by design.
+#
+# Every line here is genuinely bad writing that contains no mechanical pattern:
+# it is grammatical, unremarkable, and empty. Catching it needs a model that
+# knows the subject. The suite asserts these produce NO findings, so the
+# documented limits stay honest: if a future pattern starts catching one, the
+# eval fails and we either keep the pattern and move the line, or admit the
+# rule is too broad.
+#
+# Format: category <TAB> text
+#
+abstraction	The integration improved efficiency across the organization.
+abstraction	This change enhances the overall quality of the codebase.
+abstraction	We built a system that helps teams work better together.
+abstraction	The update includes several improvements to the user experience.
+portability	Our approach delivers real value to stakeholders.
+portability	The team is committed to building great products for our customers.
+portability	We believe strong engineering culture drives better outcomes.
+portability	Quality and speed do not have to be in tension.
+smoothed-detail	The tool significantly improves engineering productivity.
+smoothed-detail	Performance was noticeably better after the change.
+smoothed-detail	The migration took less time than we expected.
+unverifiable	Response time improved by 47% after the rewrite.
+unverifiable	The parser now handles every edge case we found.
+unverifiable	This is the approach most large companies use.
+flattened-voice	I think the design is reasonable and worth pursuing.
+flattened-voice	The proposal has merit and addresses the main concerns.
+structure	We considered three options and chose the second one.
+structure	The following sections describe each component in turn.
