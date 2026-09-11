@@ -3,6 +3,10 @@ Copyright (c) 2026 Vivek Siruvuri
 
 This product includes software developed by Peter Yang.
 
+This project is a derivative work of no-ai-slop by Peter Yang, used and
+redistributed under the MIT License. Both copyright notices are retained in
+LICENSE, as that license requires.
+
 Upstream project:  no-ai-slop
 Upstream author:   Peter Yang
 Upstream URL:      https://github.com/petergyang/no-ai-slop
