@@ -17,7 +17,124 @@ Slack · PRs · emails · docs · code comments · commits · social
 
 ## Use cases
 
-### 1. Slack message
+### 1. Technical docs
+
+> **You ask:** "Document the timeout setting"
+
+<table>
+<tr><th>Without</th><th>With</th></tr>
+<tr><td>
+
+```
+## Configuration
+
+This section describes the
+configuration options that
+are available to you.
+
+Our robust configuration
+layer empowers you to
+seamlessly leverage
+environment variables.
+
+It's worth noting that the
+`timeout` field plays a vital
+role in request handling.
+
+Simply set the value and
+you're good to go.
+```
+
+</td><td>
+
+```
+## Configuration
+
+`INGEST_TIMEOUT` sets the
+per-request timeout in
+seconds. Default 30.
+
+Set it below 22 and you will
+see spurious retries: the
+vendor's p99 was 22s in
+August 2026.
+
+Values above 120 are rejected
+at startup with
+`timeout out of range`.
+
+Requires Postgres 14+.
+```
+
+</td></tr>
+<tr><td><b>0 / 100</b></td><td><b>100 / 100</b></td></tr>
+</table>
+
+**Caught:** "this section describes" · "robust", "empowers", "seamlessly", "leverage" · "simply"
+**Delivers:** the default, the real number, the failure mode and its error string
+
+---
+
+### 2. Article or blog post
+
+> **You ask:** "Open a post about retry ceilings"
+
+<table>
+<tr><th>Without</th><th>With</th></tr>
+<tr><td>
+
+```
+In today's fast-paced
+engineering landscape,
+reliability is paramount.
+
+What nobody tells you is that
+most teams get retries wrong.
+Here's the thing: backoff
+alone isn't enough.
+Think about it.
+
+Let me be clear. This isn't
+just a technical problem.
+It's a mindset problem.
+
+In conclusion, the future of
+reliability isn't coming.
+It's already here.
+```
+
+</td><td>
+
+```
+On March 3rd our ingest worker
+spent six hours retrying one
+malformed row. It held a
+Postgres partition the whole
+time, so the nightly backfill
+never ran, and Priya spent her
+morning draining a queue
+by hand.
+
+I wrote that retry loop two
+years earlier. I gave it
+backoff and no ceiling,
+because the only failures I
+had seen were transient
+network errors, and those
+always clear. A malformed row
+never clears.
+```
+
+</td></tr>
+<tr><td><b>0 / 100</b></td><td><b>100 / 100</b></td></tr>
+</table>
+
+**Caught:** "in today's fast-paced" · "what nobody tells you" · "here's the thing" · "not X, it's Y" · "In conclusion" · the fake-profound last line
+**Delivers:** a date, a name, a consequence, and an admission — the closing flourish deleted, not rewritten
+
+---
+
+### 3. Slack message
 
 > **You ask:** "Tell the team the deploy is down"
 
@@ -60,7 +177,7 @@ post when it clears.
 
 ---
 
-### 2. Pull request
+### 4. Pull request
 
 > **You ask:** "Write the PR description for the retry fix"
 
@@ -109,7 +226,7 @@ Fixes #412.
 
 ---
 
-### 3. Email
+### 5. Email
 
 > **You ask:** "Chase Priya about the PR"
 
@@ -154,7 +271,7 @@ The fix caps attempts at three.
 
 ---
 
-### 4. Code comment
+### 6. Code comment
 
 > **You ask:** "Comment this timeout"
 
