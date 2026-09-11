@@ -611,6 +611,17 @@ def _structural_findings(body: str, words: int, channel: Channel) -> list[Findin
                 f"{channel.name} reads as plain prose. Drop the headings.",
                 _line_of(body, heading.start()),
                 _quote(body, heading.start(), heading.end())))
+        # A memo wearing a message's clothes: "**Context:** ... **Next steps:** ..."
+        # in a Slack message or an email is the signature of generated text.
+        # Scoped to short-form channels, where a bold label is never right.
+        labels = list(re.finditer(r"(?:^|\n)\s*\*\*[^*\n]{1,40}\*\*\s*:?", body))
+        if len(labels) >= 2:
+            out.append(Finding(
+                "memo-formatting", 2, "Bold section labels in a short-form channel",
+                f"{len(labels)} bold labels. A {channel.name} entry is prose, "
+                "not a memo. Write it as sentences.",
+                _line_of(body, labels[0].start()),
+                _quote(body, labels[0].start(), labels[0].end())))
 
     bold = re.findall(r"(?<![\n*])\*\*[^*\n]{1,60}\*\*(?!\s*:)", body)
     if len(bold) >= 3:
