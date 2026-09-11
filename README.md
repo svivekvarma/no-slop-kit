@@ -2,9 +2,20 @@
 
 # No Slop Kit
 
-Stops your AI assistant writing like an AI assistant.
+Makes what your AI assistant writes **crisp, readable and opinionated.**
 
 Slack · PRs · emails · docs · code comments · commits · social
+
+### What that means
+
+| | |
+| --- | --- |
+| **Crisp** | Every sentence earns its place. No preamble, no recap, no padding. |
+| **Readable** | One idea per sentence. A tired human can follow it on the first pass. |
+| **Opinionated** | Keeps your point of view, your bluntness, the thing you got wrong. Slop is what you get when writing is sanded down to offend nobody. |
+
+Most "AI writing" tools do the first one and destroy the third. This keeps the
+edge and removes the filler.
 
 | | |
 | --- | --- |
@@ -405,13 +416,25 @@ Opt out with `slop-lint: off` in front matter, or a glob in `.slopignore`.
 
 ---
 
-## Clarity, not brevity
+## Crisp is not the same as short
 
-The goal is a reader who understands, not a short draft.
+Cutting is easy. Cutting the wrong things gives you a page that is clean, brief
+and useless. Three rules keep the difference:
 
 - **Tangled sentences are flagged. Long ones are not.** A 27-word sentence holding one idea reads in one breath. Three clauses and a "which" do not.
-- **Causation is protected.** "Because", "so", "which meant" are how a reader follows an argument. Cutting them for punchiness is what makes AI prose read as a list of assertions.
-- **Storytelling earns its place in docs**, depending on which doc it is:
+- **Causation is protected.** "Because", "so", "which meant" are how a reader follows an argument. Cutting them for punchiness is what turns prose into a list of assertions.
+- **Opinion is protected.** Strong claims, blunt language, admissions, humour, the number that makes you look bad. Verified, not assumed — all of these score 100/100:
+
+  > "This design is wrong and I am the one who wrote it."
+  > "We tried Kafka for this and it was a mistake."
+  > "The vendor's API is garbage: it returns 200 on failure."
+  > "I do not understand why the old code worked."
+  > "no, that does not work for us. we need it by Thursday or we slip."
+
+  Voice markers like "Honestly," draw a severity-1 **check**, never a demand,
+  and the skill is told to keep them when they carry the writer's rhythm.
+
+**Storytelling earns its place in docs**, depending on which doc it is:
 
 | Doc type | Narrative |
 | --- | --- |
