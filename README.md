@@ -71,6 +71,7 @@ Requires Postgres 14+.
 </table>
 
 **Caught:** "this section describes" · "robust", "empowers", "seamlessly", "leverage" · "simply"
+**Also caught in docs:** binary contrasts ("this is not a cache, it's a buffer") · paraphrasing the same thing three ways ("the agent" → "the assistant" → "the tool") · marketing register ("out of the box", "under the hood", "blazing fast", "enterprise-grade")
 **Delivers:** the default, the real number, the failure mode and its error string
 
 ---
@@ -392,8 +393,8 @@ Opt out with `slop-lint: off` in front matter, or a glob in `.slopignore`.
 
 | Channel | What changes |
 | --- | --- |
-| `technical-docs` | Answer first. No em dashes. Say what breaks. |
-| `articles-and-blogs` | The closing flourish is deleted, not rewritten. |
+| `technical-docs` | Answer first. No em dashes. No marketing. One name per thing. Say what breaks. |
+| `articles-and-blogs` | Closing flourish deleted, not rewritten. No binary contrasts, no paraphrasing. |
 | `email` | Ask and deadline in the first two sentences. |
 | `messages` | One paragraph. No headings, no bold labels. |
 | `social-posts` | Hook line and closing line both go. |

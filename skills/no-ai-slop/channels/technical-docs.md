@@ -21,6 +21,9 @@ them finish the task is costing them time.
 - **One concept per heading, and no heading over a two-sentence section.** If a section is two sentences, fold it into the parent.
 - **Say what breaks.** Docs that only describe the happy path get a support ticket. Name the failure mode and the error string the reader will actually see.
 - **No marketing in reference material.** A field description is not a place for "powerful" or "flexible". Say what the field does and what its default is.
+- **Name the thing once and keep naming it that.** Rotating terms for variety ("the agent", then "the assistant", then "the tool") is worse in reference material than anywhere else: a reader scanning for one term cannot tell whether the other two mean the same thing. Pick the word and repeat it.
+- **State it, do not sell it.** "Out of the box", "under the hood", "blazing fast", "enterprise-grade", "rock solid", "future-proof", "batteries included". These have no technical meaning. Replace each with the number, the default, or the limit.
+- **No binary contrasts.** "This is not a cache. It's a write-through buffer." Just say what it is: "A write-through buffer. Writes go to Postgres and the cache in the same transaction."
 - **Tables for facts, prose for reasoning.** If every row is `name / type / default`, use a table. If it needs a "because", use a sentence.
 
 ## Channel-specific slop
@@ -34,6 +37,11 @@ them finish the task is costing them time.
 | "For more information, see the documentation." | Link the exact page. |
 | "This powerful feature allows you to..." | "This flag lets you..." or just describe the flag. |
 | "Best practices dictate that..." | Say who recommends it and why, or state the rule directly. |
+| "It works out of the box." | "No configuration is required. The defaults are in `config/default.yml`." |
+| "Under the hood, it does the heavy lifting." | Say what it does: "It batches writes in groups of 500." |
+| "A blazing fast, enterprise-grade pipeline." | "Ingests 50k rows/sec on 4 vCPU (measured 2026-08)." |
+| "The agent reads the queue. The assistant scores it." | Call it the agent both times. |
+| "This is not a cache. It's a buffer." | "A write-through buffer." |
 
 ## Keep
 

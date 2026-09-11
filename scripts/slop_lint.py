@@ -344,6 +344,29 @@ RULES: list[Rule] = [
          "If the clear word is right, repeat it.",
          r"\b(?:the )?(?:agent|assistant|tool|platform|solution|system|bot)\b"
          r"[^.!?\n]{0,80}[.!?]\s+(?:The )?(?:agent|assistant|tool|platform|solution|system|bot)\b"),
+
+    # Marketing register in documentation. A reader mid-task wants the default
+    # value and the failure mode, not a pitch. Kept to phrases with no technical
+    # meaning, so genuine terms of art ("drop-in replacement", "cloud-native")
+    # are not swept up.
+    Rule("marketing-claim", 2, "Marketing claim in documentation",
+         "Say what it does and what it costs. Let the reader judge.",
+         r"\b(?:" + _alt(
+             "out of the box", "out-of-the-box", "under the hood",
+             "heavy lifting", "first-class citizen", "batteries included",
+             "blazing fast", "blazingly fast", "lightning fast", "lightning-fast",
+             "enterprise-grade", "enterprise grade", "industrial-strength",
+             "future-proof", "futureproof", "rock solid", "rock-solid",
+             "bulletproof", "battle-tested", "turnkey", "one-stop shop",
+             "look no further", "the beauty of", "effortless", "effortlessly",
+             "painless", "hassle-free", "frictionless", "no-brainer",
+             "industry-leading", "state-of-the-art", "bleeding edge",
+             "take it to the next level", "next-level", "best of breed",
+             "groundbreaking", "revolutionary", "unparalleled", "unmatched",
+             "it just works", "incredibly powerful", "insanely fast",
+             "supercharged", "turbocharged", "rich set of features",
+             "powerful and flexible", "fully-featured", "feature-rich",
+         ) + r")\b"),
 ]
 
 
@@ -368,14 +391,20 @@ CHANNELS: dict[str, Channel] = {
     "default": Channel(
         "default", "General prose.", 1.5, 0, True, 0),
     "technical-docs": Channel(
+        # synonym-cycling is deliberately NOT muted here. Rotating terms for
+        # variety is worse in reference material than anywhere else: a reader
+        # scanning for "the agent" cannot tell whether "the assistant" two
+        # paragraphs down is the same thing.
         "technical-docs", "Reference docs, READMEs, runbooks, ADRs.",
         0.0, 0, True, 0,
-        mute=("colon-title-case", "synonym-cycling"),
-        amplify=("importance-puffery", "superficial-analysis", "empty-phrase")),
+        mute=("colon-title-case",),
+        amplify=("importance-puffery", "superficial-analysis", "empty-phrase",
+                 "binary-contrast", "marketing-claim", "synonym-cycling")),
     "articles-and-blogs": Channel(
         "articles-and-blogs", "Long-form articles, blog posts, newsletters.",
         1.5, 0, True, 0,
-        amplify=("fake-profound-kicker", "summary-recap", "faux-insight")),
+        amplify=("fake-profound-kicker", "summary-recap", "faux-insight",
+                 "binary-contrast", "throat-clearing", "marketing-claim")),
     "messages": Channel(
         "messages", "Slack, Teams, Discord, DMs, SMS.",
         0.0, 3, False, 120,

@@ -54,3 +54,13 @@ empty-phrase	default	At the end of the day, the schema has to change.
 empty-phrase	default	In today's world, every team ships continuously.
 empty-phrase	default	In this article, we will look at the parser. Let's dive in.
 emoji-heading	default	# 🚀 Shipping the new parser
+#
+# Documentation-register slop. Not upstream's examples: these come from the
+# marketing-claim rule and the un-muting of synonym-cycling in technical-docs.
+marketing-claim	technical-docs	It works out of the box with no configuration.
+marketing-claim	technical-docs	Under the hood, the scheduler does the heavy lifting.
+marketing-claim	technical-docs	A blazing fast, enterprise-grade ingest pipeline.
+marketing-claim	technical-docs	This future-proof, rock solid design is bulletproof.
+marketing-claim	articles-and-blogs	Look no further: the beauty of this approach is that it just works.
+synonym-cycling	technical-docs	The agent reads the queue. The assistant then scores each batch.
+binary-contrast	technical-docs	This is not a caching layer. It's a write-through buffer.

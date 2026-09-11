@@ -20,6 +20,9 @@ read beautifully and say nothing.
 - **At most 1-2 em dashes in the whole piece**, and only where they clearly beat a comma or a period.
 - **Ban the false-expertise frame.** "What nobody tells you", "most people get this wrong", "the part everyone misses". These claim an audience you have not measured.
 - **Make the opening do work.** The first two sentences should contain a fact, a scene, or a claim someone could disagree with. Not a definition and not a framing of the topic's importance.
+- **No binary contrasts.** "It isn't a tooling problem. It's a culture problem." Pick the one you mean and argue for it.
+- **No marketing register.** "Blazing fast", "game-changing", "revolutionary", "the beauty of". If the thing is fast, give the number.
+- **Do not paraphrase to avoid repetition.** If the right word is "retry ceiling", write "retry ceiling" every time. Rotating to "attempt limit" and "cap" makes the reader check whether you changed subject.
 - **Vary paragraph length on purpose.** Three consecutive four-line paragraphs is the rhythm of generated text.
 
 ## Channel-specific slop
