@@ -385,6 +385,7 @@ class Channel:
     soft_word_cap: int              # 0 = no cap
     mute: tuple[str, ...] = ()      # rule ids not scored in this channel
     amplify: tuple[str, ...] = ()   # rule ids bumped one severity level
+    long_sentence_words: int = 30   # above this, check the sentence reads clean
 
 
 CHANNELS: dict[str, Channel] = {
@@ -399,22 +400,26 @@ CHANNELS: dict[str, Channel] = {
         0.0, 0, True, 0,
         mute=("colon-title-case",),
         amplify=("importance-puffery", "superficial-analysis", "empty-phrase",
-                 "binary-contrast", "marketing-claim", "synonym-cycling")),
+                 "binary-contrast", "marketing-claim", "synonym-cycling"),
+        long_sentence_words=26),
     "articles-and-blogs": Channel(
         "articles-and-blogs", "Long-form articles, blog posts, newsletters.",
         1.5, 0, True, 0,
         amplify=("fake-profound-kicker", "summary-recap", "faux-insight",
-                 "binary-contrast", "throat-clearing", "marketing-claim")),
+                 "binary-contrast", "throat-clearing", "marketing-claim"),
+        long_sentence_words=32),
     "messages": Channel(
         "messages", "Slack, Teams, Discord, DMs, SMS.",
         0.0, 3, False, 120,
         mute=("colon-title-case", "passive-agent"),
-        amplify=("throat-clearing", "summary-recap", "interpretive-metadiscourse")),
+        amplify=("throat-clearing", "summary-recap", "interpretive-metadiscourse"),
+        long_sentence_words=24),
     "email": Channel(
         "email", "Work email, cold outreach, replies.",
         0.0, 1, False, 250,
         mute=("colon-title-case",),
-        amplify=("throat-clearing", "importance-puffery", "empty-phrase")),
+        amplify=("throat-clearing", "importance-puffery", "empty-phrase"),
+        long_sentence_words=24),
     "social-posts": Channel(
         "social-posts", "LinkedIn, X, Threads, Bluesky posts.",
         0.0, 4, False, 220,
@@ -441,7 +446,8 @@ CHANNELS: dict[str, Channel] = {
         0.0, 0, True, 400,
         mute=("colon-title-case", "synonym-cycling"),
         amplify=("importance-puffery", "superficial-analysis",
-                 "interpretive-metadiscourse", "summary-recap")),
+                 "interpretive-metadiscourse", "summary-recap"),
+        long_sentence_words=26),
     "review-comments": Channel(
         "review-comments", "Code review comments and PR replies.",
         0.0, 1, False, 120,
@@ -666,6 +672,41 @@ def _structural_findings(body: str, words: int, channel: Channel) -> list[Findin
             f"{channel.name}.", 1, ""))
 
     sentences = [s.strip() for s in re.split(r"(?<=[.!?])\s+", body) if s.strip()]
+
+    # Length alone does not make a sentence hard to follow. "I gave it backoff
+    # and no ceiling, because the only failures I had seen were transient" is
+    # 20+ words and perfectly clear: it carries one idea and one reason.
+    # What defeats a reader is length plus stacked clauses. So two findings:
+    # a tangled sentence is a real problem, a merely long one is a prompt to
+    # look. Subordinators that carry causation (because, so) are not counted
+    # as tangle, because those are the words that explain things.
+    tangle_re = re.compile(
+        r"\b(?:which|whereby|wherein|thereby|whilst|whereas|notwithstanding|"
+        r"insofar|with respect to|in terms of|as well as|in addition to|"
+        r"for the purpose of|by means of|in the event that)\b", re.IGNORECASE)
+    long_cap = channel.long_sentence_words
+    for sentence in sentences:
+        n = word_count(sentence)
+        if n <= long_cap:
+            continue
+        clauses = sentence.count(",") + sentence.count(";")
+        subordinators = len(tangle_re.findall(sentence))
+        if clauses >= 3 or subordinators >= 2:
+            out.append(Finding(
+                "tangled-sentence", 2, "Long sentence with stacked clauses",
+                f"{n} words, {clauses} clause breaks. Split it so each "
+                "sentence carries one idea.",
+                _line_of(body, body.find(sentence[:40])) if sentence[:40] in body else 1,
+                sentence[:150]))
+        elif n > long_cap + 8:
+            out.append(Finding(
+                "long-sentence", 1, "Long sentence",
+                f"{n} words against a {long_cap}-word guide for "
+                f"{channel.name}. Fine if it reads in one breath; split it if "
+                "the reader has to back up.",
+                _line_of(body, body.find(sentence[:40])) if sentence[:40] in body else 1,
+                sentence[:150]))
+
     run = 0
     for sentence in sentences:
         if 0 < word_count(sentence) <= 5:

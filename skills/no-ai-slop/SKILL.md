@@ -65,6 +65,8 @@ If the goal is unclear, ask what the reader should think, feel or do after readi
 - **Lead with the point when the setup adds nothing.** Cut generic throat-clearing. Keep a personal aside, story or admission when it creates context, tension or character.
 - **Front-load only when it improves clarity.** Put conclusions early when that helps the reader. Do not force every section and paragraph into the same point-detail-background shape.
 - **Keep the user's meaning.** Don't invent claims, examples, stats or opinions. If something is unclear, ask.
+- **Clarity beats brevity.** The goal is a reader who understands, not a short draft. Cutting a "because", a worked example, or the story of what went wrong makes a piece shorter and worse. Delete the performance of insight; keep the explanation.
+- **One idea per sentence, not one clause per sentence.** Split a sentence that carries three ideas or needs three commas and a "which". Leave a long sentence alone when it holds one idea and reads in one breath.
 - **Open it up, don't dumb it down.** Keep the substance, nuance and precision. Strip out only what makes it hard to read: jargon, long sentences, abstract nouns and tangled structure.
 - **Use active voice.** "The team shipped it Tuesday" beats "the decision emerged." Never let inanimate things do human verbs.
 - **Make every sentence earn its place.** Cut empty qualifiers and throat-clearing. Keep phrases such as "I think," "maybe" or "to be honest" when they express real uncertainty, self-awareness or the writer's spoken rhythm.

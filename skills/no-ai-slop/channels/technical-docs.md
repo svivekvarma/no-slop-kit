@@ -11,6 +11,33 @@ The reader is mid-task and usually mildly annoyed. They want the command, the
 field name, or the reason a decision was made. Every sentence that does not help
 them finish the task is costing them time.
 
+## Narrative is allowed here, and often required
+
+The rules below are written against marketing and padding, not against
+explanation. Do not read them as "make it terse". A doc that is short and
+leaves the reader guessing has failed harder than a long one.
+
+Which doc you are writing decides how much narrative earns its place:
+
+| Doc type | Reader is | Narrative |
+| --- | --- | --- |
+| **Reference** (API, config, flags) | Looking one thing up | None. Field, type, default, limit. |
+| **How-to** (runbook, task guide) | Mid-task, often at 2am | Only the causation: why this step, what breaks without it. |
+| **Explanation** (architecture, ADR, concept) | Trying to understand | Yes. The problem, what you tried, why it failed, what you chose. |
+| **Tutorial** (getting started) | Learning, no context yet | Yes. One worked example carried the whole way through. |
+
+In explanation and tutorial docs, tell the story: "We ran unbounded retries for
+two years. On March 3rd one malformed row held a partition for six hours. So
+batches now stop after three attempts." That arc is not padding. It is the only
+thing that stops the next person reverting your fix.
+
+What makes a doc hard to read is rarely length. It is a sentence carrying three
+ideas, an abstract noun where a verb belongs, and a missing "because".
+
+- **One idea per sentence.** If you need three commas and a "which" to hold it together, it is two sentences.
+- **Keep the "because".** "Retries stop at three because a malformed row never becomes valid" beats "the retry limit is three". The reason is what the reader needs to decide whether your rule applies to them.
+- **Lead each section with the answer, then explain.** Front-loading is not the same as omitting.
+
 ## Extra rules
 
 - **Answer the question in the first sentence.** A runbook section starts with the command, not with what the section will cover. Cut "This section describes..." and "In this guide we will...".
@@ -48,3 +75,8 @@ them finish the task is costing them time.
 Keep the warnings, the "we tried X and it did not work" notes, and the blunt
 admissions of known bugs. Those are the most valuable sentences in most internal
 docs, and they are the first thing a polishing pass deletes.
+
+Keep the worked example that runs through the whole page. Keep the incident that
+explains why the limit is three and not five. Keep a long sentence when it holds
+one idea and reads in one breath. Cutting those does not make a doc cleaner, it
+makes it a reference page pretending to be an explanation.

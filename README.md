@@ -393,8 +393,8 @@ Opt out with `slop-lint: off` in front matter, or a glob in `.slopignore`.
 
 | Channel | What changes |
 | --- | --- |
-| `technical-docs` | Answer first. No em dashes. No marketing. One name per thing. Say what breaks. |
-| `articles-and-blogs` | Closing flourish deleted, not rewritten. No binary contrasts, no paraphrasing. |
+| `technical-docs` | Answer first, then explain. No marketing. One name per thing. Say what breaks. |
+| `articles-and-blogs` | Cut the performance of insight, keep the story that carries it. |
 | `email` | Ask and deadline in the first two sentences. |
 | `messages` | One paragraph. No headings, no bold labels. |
 | `social-posts` | Hook line and closing line both go. |
@@ -402,6 +402,29 @@ Opt out with `slop-lint: off` in front matter, or a glob in `.slopignore`.
 | `code-comments` | Why, never what. |
 | `pull-requests` | Reason, risk, rollback. Not a diff summary. |
 | `review-comments` | Say whether it blocks. Propose the change. |
+
+---
+
+## Clarity, not brevity
+
+The goal is a reader who understands, not a short draft.
+
+- **Tangled sentences are flagged. Long ones are not.** A 27-word sentence holding one idea reads in one breath. Three clauses and a "which" do not.
+- **Causation is protected.** "Because", "so", "which meant" are how a reader follows an argument. Cutting them for punchiness is what makes AI prose read as a list of assertions.
+- **Storytelling earns its place in docs**, depending on which doc it is:
+
+| Doc type | Narrative |
+| --- | --- |
+| Reference (API, flags, config) | None. Field, type, default, limit. |
+| How-to / runbook | Only the causation: why this step, what breaks without it. |
+| Explanation / ADR | Yes. The problem, what you tried, why it failed, what you chose. |
+| Tutorial | Yes. One worked example carried the whole way through. |
+
+> "We ran unbounded retries for two years. On March 3rd one malformed row held a
+> partition for six hours. So batches now stop after three attempts."
+
+That arc is not padding. It is the only thing that stops the next person
+reverting your fix.
 
 ---
 

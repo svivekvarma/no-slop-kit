@@ -64,3 +64,8 @@ marketing-claim	technical-docs	This future-proof, rock solid design is bulletpro
 marketing-claim	articles-and-blogs	Look no further: the beauty of this approach is that it just works.
 synonym-cycling	technical-docs	The agent reads the queue. The assistant then scores each batch.
 binary-contrast	technical-docs	This is not a caching layer. It's a write-through buffer.
+#
+# Clarity. A sentence is hard to follow when it stacks clauses, not when it is
+# merely long: the clean/long-but-clear.md fixture pins the other side of this.
+tangled-sentence	technical-docs	The configuration system, which is designed to be extensible, allows users, in addition to the standard options, to specify custom handlers, whereby the pipeline can be adapted with respect to throughput.
+tangled-sentence	technical-docs	In the event that the request fails, the retry mechanism, which is configurable, will attempt the operation again, as well as logging the failure, thereby ensuring visibility.

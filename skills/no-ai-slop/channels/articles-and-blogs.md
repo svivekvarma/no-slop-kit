@@ -11,6 +11,23 @@ This is the channel where slop is most fluent and hardest to spot, because the
 form rewards rhythm and rhythm is exactly what AI imitates well. The piece can
 read beautifully and say nothing.
 
+## Cut the performance, keep the story
+
+Almost every rule here deletes something, so it is easy to over-apply them and
+end up with a piece that is clean, short and says nothing. The target is not
+brevity. It is a reader who finishes the piece understanding something they
+did not before.
+
+What gets deleted is the **performance** of insight: the hook, the false
+suspense, the mic-drop close. What stays is the **story** that carries the
+argument: what happened, what you expected, what you got, what you changed.
+
+- **Scene, then claim.** "On March 3rd our worker retried one row for six hours" earns the claim that follows it. "Reliability is paramount" earns nothing.
+- **Keep the arc, cut the drum roll.** The incident, the wrong assumption, the fix. Delete "and here's where it gets interesting" between them.
+- **Keep the causation words.** "Because", "so", "which meant". These are how a reader follows an argument. Cutting them for punchiness is what makes AI prose feel like a list of assertions.
+- **A long sentence is fine if it holds one idea.** "I gave it backoff and no ceiling, because the only failures I had seen were transient network errors, and those always clear" is 27 words and reads in one breath. Split a sentence when it carries three ideas, not when it passes a word count.
+- **Admit the thing you got wrong.** It is the one sentence a model will not write for you, and the one readers remember.
+
 ## Extra rules
 
 - **Kill the kicker.** The last line is where slop concentrates. Delete the final "deep" sentence and end on the last concrete thing you said. Do not rewrite it into a better metaphor.
